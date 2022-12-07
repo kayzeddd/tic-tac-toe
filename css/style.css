@@ -1,0 +1,46 @@
+html,body{
+    margin: 0;
+    border: 0;
+    height: 100vh;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.gameboardDiv {
+    display:grid;
+    height: 600px;
+    width: 600px;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+}
+
+.square {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.midV {
+    border-left: 2px solid black;
+    border-right: 2px solid black;
+}
+
+.midH {
+    border-top: 2px solid black;
+    border-bottom: 2px solid black;
+}
+
+img[src="images/x.svg"]{
+    height: 150px;
+    width: auto;
+}
+
+img[src="images/circle.svg"]{
+    height: 140px;
+    width: auto;
+}
