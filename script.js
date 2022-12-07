@@ -3,8 +3,8 @@ const gameboard = (() => {
     const newGameBtn = document.querySelector(".newGameBtn");
     const x = "images/x.svg";
     const o = "images/circle.svg"
-    const arr = [x, o, x, x, o, x, x, o, x];
-    const obj = {arr,};
+    let boardArr = [1,2,3,4,5,6,7,8,9];
+    let boardObj = {boardArr};
     let turn = true;
     const makeBoard = () => {
         for (let i= 1; i <= 9; i++){
@@ -18,37 +18,44 @@ const gameboard = (() => {
         }
     }
     const placeMark = (e) => {
-        console.log(e.target);
         let targetSquare = e.target;
+        let targetDataSquare = e.target.getAttribute("data-square");
         let imgTag = document.createElement("img");
         if (turn == true) {
             imgTag.setAttribute("src",x);
+            boardArr[targetDataSquare - 1] = "x";
             turn = false
         }
         else if (turn == false){
             imgTag.setAttribute("src", o);
+            boardArr[targetDataSquare - 1] = "o";
             turn = true;
         }
         targetSquare.appendChild(imgTag);
-    }
-    const fillBoard = () => {
-        for (let i=1; i <= arr.length; i++){
-            let square = document.querySelector(`div[data-square="${i}"]`);
-            let imgTag = document.createElement("img");
-            (arr[i - 1] == x) ? imgTag.setAttribute("src", x) 
-                              : imgTag.setAttribute("src", o);
-            square.appendChild(imgTag)
-        }
+        checkWin();
     }
     const newGame = () => {
         while (gameboardGrid.childNodes.length > 0){
             gameboardGrid.removeChild(gameboardGrid.lastChild)
         }
+        boardArr = [1,2,3,4,5,6,7,8,9];
         makeBoard();
+    }
+    function checkWin(){
+        let arr = boardArr;
+        const combos = [arr.slice(0,3),arr.slice(3,6),arr.slice(6,9),
+                        [0,3,6].map(x => arr[x]),[1,4,7].map(x => arr[x]),
+                        [2,5,8].map(x => arr[x]),[0,4,8].map(x => arr[x]),
+                        [2,4,6].map(x => arr[x])];
+        for (let i = 0; i < combos.length; i++ ){
+            if (combos[i].every(x => x == combos[i][0])){
+                console.log(`win = ${combos[i][0]}`)
+            }
+        }
     }
     newGameBtn.addEventListener("click", newGame);
     makeBoard()
-    return {gameboardGrid}
+    return {boardArr}
 })()
 
 
@@ -60,4 +67,3 @@ const createPlayer = (name) => {
 }
 
 const playerOne = createPlayer("Sam")
-
