@@ -13,19 +13,29 @@
     </header>
     <main>
         <div class="playerContainer">
-            <div class="playerDiv playerTwoDiv">
-                <label for="playerOne">Player 1 Name:</label>
-                <input type="text" id="playerOne" maxlength="20" value="Player 1">
+            <div class="playerInputs">
+                <div class="playerDiv">
+                    <label for="playerOne">Player 1 Name:</label>
+                    <input type="text" id="playerOne" maxlength="20" value="Player 1">
+                </div>
+                <div class="playerDiv">
+                    <label for="playerTwo">Player 2 Name:</label>
+                    <input type="text" id="playerTwo" maxlength="20" value="Player 2">
+                </div>
             </div>
-            <div class="playerDiv playerOneDiv">
-                <label for="playerTwo">Player 2 Name:</label>
-                <input type="text" id="playerTwo" maxlength="20" value="Player 2">
+            <div class="playerNameContainer">
+                <div class="player1Name"></div>
+                <div class="vs">VS</div>
+                <div class="player2Name"></div>
             </div>
         </div>
         <div class="btnContainer">
             <button type="button" class="newGameBtn">New Game</button>
         </div>
         <div class="gameboardGrid"></div>
+        <div class="popup">
+            <div class="popupText">YOU WIN!</div>
+        </div>
     </main>
 </body>
 <script src="script.js" rel="javascript"></script>

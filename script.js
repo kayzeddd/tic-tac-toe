@@ -15,42 +15,30 @@ const Players = () => {
 }
 
 const gameboard = (() => {
-    const playerContainer = document.querySelector(".playerContainer");
     const gameboardGrid = document.querySelector(".gameboardGrid");
     const newGameBtn = document.querySelector(".newGameBtn");
     newGameBtn.addEventListener("click", _newGame);
     newGameBtn.addEventListener("click", createPlayers, {once: true})
+
     let boardArr = [1,2,3,4,5,6,7,8,9];
     let turn = true;
     let players;
+
     function createPlayers(){
+        const playerInputs = document.querySelector(".playerInputs");
+        const playerNames = document.querySelector(".playerNameContainer");
+        const player1Name = document.querySelector(".player1Name");
+        const player2Name = document.querySelector(".player2Name");
+
         players = Players();
-        while (playerContainer.hasChildNodes()){
-            playerContainer.removeChild(playerContainer.lastChild)
-        }
-        let playerDiv = document.createElement("div");
-        playerDiv.classList.add("newPlayerDiv");
-        for (let i = 0; i < 3; i++){
-            let player = document.createElement("div");
-            if (i == 0 ){
-                player.textContent = players.player1.name;
-                player.classList.add("playerName");
-            }
-            else if (i == 1 ){
-                let vs = document.createElement("div")
-                vs.textContent = "VS";
-                vs.classList.add("vs", "playerName");
-                playerDiv.appendChild(vs);
-                continue
-            }
-            else{
-                player.textContent = players.player2.name;
-                player.classList.add("playerName");
-            }
-            playerDiv.appendChild(player);
-        }
-        playerContainer.appendChild(playerDiv)
+
+        player1Name.textContent = players.player1.name;
+        player2Name.textContent = players.player2.name;
+
+        playerInputs.style = "display:none";
+        playerNames.style = "display:flex";
     }
+
     function _makeBoard() {
         for (let i= 1; i <= 9; i++){
            let square = document.createElement("div");
@@ -62,6 +50,7 @@ const gameboard = (() => {
            gameboardGrid.appendChild(square);
         }
     }
+
     const _placeMark = (e) => {
         const x = "images/x.svg";
         const o = "images/circle.svg"
@@ -81,6 +70,7 @@ const gameboard = (() => {
         targetSquare.appendChild(imgTag);
         _checkWin();
     }
+
     function _newGame() {
         while (gameboardGrid.hasChildNodes()){
             gameboardGrid.removeChild(gameboardGrid.lastChild)
@@ -89,8 +79,14 @@ const gameboard = (() => {
         turn = true;
         _makeBoard();
     }
+
     function _checkWin(){
         let arr = boardArr;
+        if (arr.every(x => x !== +x)){
+            console.log("TIE!")
+            gameboardGrid.addEventListener("click", (e) => e.stopPropagation(), true)
+            return
+        }
         const combos = [arr.slice(0,3),arr.slice(3,6),arr.slice(6,9),
                         [0,3,6].map(x => arr[x]),[1,4,7].map(x => arr[x]),
                         [2,5,8].map(x => arr[x]),[0,4,8].map(x => arr[x]),
@@ -109,10 +105,7 @@ const gameboard = (() => {
             }
         }
     }
-    return {
-        newGame: () => {
-            _newGame()
-        }
-    }
+
+    return 
 })()
 
