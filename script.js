@@ -17,24 +17,35 @@ const Players = () => {
 const gameboard = (() => {
     const gameboardGrid = document.querySelector(".gameboardGrid");
     const newGameBtn = document.querySelector(".newGameBtn");
+    const popup = document.querySelector(".popup");
+    const newGameBtn2 = document.querySelector(".newGameBtn2");
+    const player1score = document.querySelector(".player1Score");
+    const player2score = document.querySelector(".player2Score");
+    const popupText = document.querySelector(".popupText");
+
     newGameBtn.addEventListener("click", _newGame);
     newGameBtn.addEventListener("click", createPlayers, {once: true})
+    newGameBtn2.addEventListener("click", _newGame)
 
     let boardArr = [1,2,3,4,5,6,7,8,9];
     let turn = true;
+    let count = 0;
     let players;
 
     function createPlayers(){
+        const mainTag = document.querySelector("main")
         const playerInputs = document.querySelector(".playerInputs");
         const playerNames = document.querySelector(".playerNameContainer");
         const player1Name = document.querySelector(".player1Name");
         const player2Name = document.querySelector(".player2Name");
+        const btnContainer = document.querySelector(".btnContainer");
 
         players = Players();
 
         player1Name.textContent = players.player1.name;
         player2Name.textContent = players.player2.name;
 
+        mainTag.removeChild(btnContainer)
         playerInputs.style = "display:none";
         playerNames.style = "display:flex";
     }
@@ -47,13 +58,14 @@ const gameboard = (() => {
            if (i == 4 || i == 5 || i == 6){square.classList.add("midH")}; 
            square.setAttribute("data-square", `${i}`);
            square.addEventListener("click", (e) => _placeMark(e), {once: true})
+           gameboardGrid.removeEventListener("click", _stopProp, true)
            gameboardGrid.appendChild(square);
         }
     }
 
     const _placeMark = (e) => {
         const x = "images/x.svg";
-        const o = "images/circle.svg"
+        const o = "images/circle.svg";
         let targetSquare = e.target;
         let targetDataSquare = e.target.getAttribute("data-square");
         let imgTag = document.createElement("img");
@@ -68,6 +80,7 @@ const gameboard = (() => {
             turn = true;
         }
         targetSquare.appendChild(imgTag);
+        count++;
         _checkWin();
     }
 
@@ -77,33 +90,44 @@ const gameboard = (() => {
         }
         boardArr = [1,2,3,4,5,6,7,8,9];
         turn = true;
+        count = 0;
+        popup.style = "display: none"
         _makeBoard();
     }
 
     function _checkWin(){
-        let arr = boardArr;
-        if (arr.every(x => x !== +x)){
-            console.log("TIE!")
-            gameboardGrid.addEventListener("click", (e) => e.stopPropagation(), true)
-            return
-        }
+        const arr = boardArr;
         const combos = [arr.slice(0,3),arr.slice(3,6),arr.slice(6,9),
                         [0,3,6].map(x => arr[x]),[1,4,7].map(x => arr[x]),
                         [2,5,8].map(x => arr[x]),[0,4,8].map(x => arr[x]),
                         [2,4,6].map(x => arr[x])];
+        if (count == 9){
+            if(arr.every(x => x !== +x)){
+            gameboardGrid.addEventListener("click", _stopProp, true);
+            popupText.textContent = "TIE!";
+            popup.style = "display: flex";
+            }
+        }
         for (let i = 0; i < combos.length; i++ ){
             if (combos[i].every(x => x == combos[i][0])){
                 if(combos[i][0] == "x"){
                     players.player1.addWin();
-                    console.log(players)
+                    popupText.textContent = `${players.player1.name} WINS!`
+                    player1score.textContent = players.player1.wins;
                 }
-                else {
+                else if (combos[i][0] == "o"){
                     players.player2.addWin()
-                    console.log(players)
+                    popupText.textContent = `${players.player2.name} WINS!`
+                    player2score.textContent = players.player2.wins;
                 }
-                gameboardGrid.addEventListener("click", (e) => e.stopPropagation(), true)
+                popup.style = "display: flex";
+                gameboardGrid.addEventListener("click", _stopProp, true)
             }
         }
+    }
+
+    function _stopProp(e){
+        e.stopPropagation();
     }
 
     return 
