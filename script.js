@@ -1,6 +1,6 @@
 const Players = () => {
-    const playerOne = createPlayer(document.querySelector("#playerOne").value);
-    const playerTwo = createPlayer(document.querySelector("#playerTwo").value);
+    const player1 = createPlayer(document.querySelector("#playerOne").value);
+    const player2 = createPlayer(document.querySelector("#playerTwo").value);
     function createPlayer(name) {
         let player = {
             name,
@@ -11,10 +11,11 @@ const Players = () => {
         }
         return player 
     }
-   return {playerOne, playerTwo}
+   return {player1, player2}
 }
 
 const gameboard = (() => {
+    const playerContainer = document.querySelector(".playerContainer");
     const gameboardGrid = document.querySelector(".gameboardGrid");
     const newGameBtn = document.querySelector(".newGameBtn");
     newGameBtn.addEventListener("click", _newGame);
@@ -24,6 +25,31 @@ const gameboard = (() => {
     let players;
     function createPlayers(){
         players = Players();
+        while (playerContainer.hasChildNodes()){
+            playerContainer.removeChild(playerContainer.lastChild)
+        }
+        let playerDiv = document.createElement("div");
+        playerDiv.classList.add("newPlayerDiv");
+        for (let i = 0; i < 3; i++){
+            let player = document.createElement("div");
+            if (i == 0 ){
+                player.textContent = players.player1.name;
+                player.classList.add("playerName");
+            }
+            else if (i == 1 ){
+                let vs = document.createElement("div")
+                vs.textContent = "VS";
+                vs.classList.add("vs", "playerName");
+                playerDiv.appendChild(vs);
+                continue
+            }
+            else{
+                player.textContent = players.player2.name;
+                player.classList.add("playerName");
+            }
+            playerDiv.appendChild(player);
+        }
+        playerContainer.appendChild(playerDiv)
     }
     function _makeBoard() {
         for (let i= 1; i <= 9; i++){
@@ -56,7 +82,7 @@ const gameboard = (() => {
         _checkWin();
     }
     function _newGame() {
-        while (gameboardGrid.childNodes.length > 0){
+        while (gameboardGrid.hasChildNodes()){
             gameboardGrid.removeChild(gameboardGrid.lastChild)
         }
         boardArr = [1,2,3,4,5,6,7,8,9];
@@ -72,13 +98,14 @@ const gameboard = (() => {
         for (let i = 0; i < combos.length; i++ ){
             if (combos[i].every(x => x == combos[i][0])){
                 if(combos[i][0] == "x"){
-                    players.playerOne.addWin();
+                    players.player1.addWin();
                     console.log(players)
                 }
                 else {
-                    players.playerTwo.addWin()
+                    players.player2.addWin()
                     console.log(players)
                 }
+                gameboardGrid.addEventListener("click", (e) => e.stopPropagation(), true)
             }
         }
     }

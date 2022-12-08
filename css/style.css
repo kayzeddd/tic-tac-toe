@@ -37,8 +37,9 @@ main {
 
 }
 
-.playerDiv {
+.playerContainer {
     display: flex;
+    justify-content: center;
     align-items: center;
     column-gap: 20px;
     font-size: 1.1rem;
@@ -98,4 +99,19 @@ img[src="images/x.svg"]{
 img[src="images/circle.svg"]{
     height: 140px;
     width: auto;
+}
+
+.newPlayerDiv {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    column-gap: 40px;
+}
+
+.playerName {
+    font-size: 35px;
+}
+
+.newPlayerDiv .vs {
+    font-size: 25px;
 }
