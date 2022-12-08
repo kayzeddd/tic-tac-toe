@@ -8,8 +8,23 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <header>
+        <h1>Tic-Tac-Toe</h1>
+    </header>
     <main>
-        <button type="button" class="newGameBtn">New Game</button>
+        <div class="playerDiv">
+            <div class="player">
+                <label for="playerOne">Player 1 Name:</label>
+                <input type="text" id="playerOne" maxlength="20" value="Player 1">
+            </div>
+            <div class="player">
+                <label for="playerTwo">Player 2 Name:</label>
+                <input type="text" id="playerTwo" maxlength="20" value="Player 2">
+            </div>
+        </div>
+        <div class="btnContainer">
+            <button type="button" class="newGameBtn">New Game</button>
+        </div>
         <div class="gameboardGrid"></div>
     </main>
 </body>
