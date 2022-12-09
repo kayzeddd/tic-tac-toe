@@ -9,15 +9,31 @@ const createPlayer = (name) => {
     return player 
 }
 
+const createAI = () => {
+    let playerAI = {
+        name: playerAI,
+        wins: 0,
+        addWin(){
+            this.wins += 1
+        }
+    }
+    const playAI = () => {
+        let free
+    }
+
+    return Object.assign({},playerAI)
+}
+
 const gameboard = (() => {
     const gameboardGrid = document.querySelector(".gameboardGrid");
-    const newGameBtn = document.querySelector(".newGameBtn");
     const mainTag = document.querySelector("main")
     const playerInputs = document.querySelector(".playerInputs");
     const playerNames = document.querySelector(".playerNameContainer");
     const player1Name = document.querySelector(".player1Name");
     const player2Name = document.querySelector(".player2Name");
     const btnContainer = document.querySelector(".btnContainer");
+    const newGameBtn = document.querySelector(".newGameBtn");
+    const vsAIbtn = document.querySelector(".vsAIbtn");
     const popup = document.querySelector(".popup");
     const newGameBtn2 = document.querySelector(".newGameBtn2");
     const player1score = document.querySelector(".player1Score");
@@ -29,15 +45,23 @@ const gameboard = (() => {
     let count = 0;
     let player1;
     let player2;
+    let AIplay = false;
 
     newGameBtn.addEventListener("click", _newGame);
-    newGameBtn.addEventListener("click", createPlayers, {once: true})
-    newGameBtn2.addEventListener("click", _newGame)
+    newGameBtn.addEventListener("click", createPlayers, {once: true});
+    vsAIbtn.addEventListener("click", () => AIplay = true);
+    vsAIbtn.addEventListener("click", _newGame);
+    vsAIbtn.addEventListener("click", createPlayers, {once: true});
+    newGameBtn2.addEventListener("click", _newGame);
     
     function createPlayers(){
         player1 = createPlayer(document.querySelector("#playerOne").value);
-        if ()
-        player2 = createPlayer(document.querySelector("#playerTwo").value);
+        if (AIplay == true){
+            player2 = createPlayer("AI")
+        }
+        else {
+            player2 = createPlayer(document.querySelector("#playerTwo").value);
+        }
         player1Name.textContent = player1.name;
         player2Name.textContent = player2.name;
         mainTag.removeChild(btnContainer)
@@ -46,11 +70,11 @@ const gameboard = (() => {
     }
 
     function _makeBoard() {
-        for (let i= 1; i <= 9; i++){
+        for (let i= 0; i < 9; i++){
            let square = document.createElement("div");
            square.classList.add("square");
-           if (i == 2 || i == 5 || i == 8){square.classList.add("midV")};
-           if (i == 4 || i == 5 || i == 6){square.classList.add("midH")}; 
+           if (i == 1 || i == 4 || i == 7){square.classList.add("midV")};
+           if (i == 3 || i == 4 || i == 5){square.classList.add("midH")}; 
            square.setAttribute("data-square", `${i}`);
            square.addEventListener("click", (e) => _placeMark(e), {once: true})
            gameboardGrid.removeEventListener("click", _stopProp, true)
@@ -67,12 +91,12 @@ const gameboard = (() => {
         let imgTag = document.createElement("img");
         if (turn == true) {
             imgTag.setAttribute("src", x);
-            boardArr[targetDataSquare - 1] = "x";
+            boardArr[targetDataSquare] = "x";
             turn = false
         }
-        else if (turn == false){
+        else if (turn == false && AIplay == false){
             imgTag.setAttribute("src", o);
-            boardArr[targetDataSquare - 1] = "o";
+            boardArr[targetDataSquare] = "o";
             turn = true;
         }
         targetSquare.appendChild(imgTag);
@@ -98,13 +122,6 @@ const gameboard = (() => {
                         [0,3,6].map(x => arr[x]),[1,4,7].map(x => arr[x]),
                         [2,5,8].map(x => arr[x]),[0,4,8].map(x => arr[x]),
                         [2,4,6].map(x => arr[x])];
-        if (count == 9){
-            if(arr.every(x => x !== +x)){
-            gameboardGrid.addEventListener("click", _stopProp, true);
-            popupText.textContent = "TIE!";
-            popup.style = "display: flex";
-            }
-        }
         for (let i = 0; i < combos.length; i++ ){
             if (combos[i].every(x => x == combos[i][0])){
                 if(combos[i][0] == "x"){
@@ -121,6 +138,15 @@ const gameboard = (() => {
                 }
                 popup.style = "display: flex";
                 gameboardGrid.addEventListener("click", _stopProp, true)
+                return
+            }
+        }
+        if (count == 9){
+            if(arr.every(x => x !== +x)){
+            gameboardGrid.addEventListener("click", _stopProp, true);
+            popupText.textContent = "TIE!";
+            popup.style = "display: flex";
+            return
             }
         }
     }
@@ -141,18 +167,3 @@ const gameboard = (() => {
 
     return 
 })()
-
-const createAI = () => {
-    let playerAI = {
-        name: playerAI,
-        wins: 0,
-        addWin(){
-            this.wins += 1
-        }
-    }
-    const playAI = () => {
-        ()
-    }
-
-    return Object.assign({},playerAI)
-}
