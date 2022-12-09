@@ -36,7 +36,6 @@ const gameboard = (() => {
     
     function createPlayers(){
         player1 = createPlayer(document.querySelector("#playerOne").value);
-        if ()
         player2 = createPlayer(document.querySelector("#playerTwo").value);
         player1Name.textContent = player1.name;
         player2Name.textContent = player2.name;
