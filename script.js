@@ -17,6 +17,12 @@ const Players = () => {
 const gameboard = (() => {
     const gameboardGrid = document.querySelector(".gameboardGrid");
     const newGameBtn = document.querySelector(".newGameBtn");
+    const mainTag = document.querySelector("main")
+    const playerInputs = document.querySelector(".playerInputs");
+    const playerNames = document.querySelector(".playerNameContainer");
+    const player1Name = document.querySelector(".player1Name");
+    const player2Name = document.querySelector(".player2Name");
+    const btnContainer = document.querySelector(".btnContainer");
     const popup = document.querySelector(".popup");
     const newGameBtn2 = document.querySelector(".newGameBtn2");
     const player1score = document.querySelector(".player1Score");
@@ -33,18 +39,9 @@ const gameboard = (() => {
     let players;
 
     function createPlayers(){
-        const mainTag = document.querySelector("main")
-        const playerInputs = document.querySelector(".playerInputs");
-        const playerNames = document.querySelector(".playerNameContainer");
-        const player1Name = document.querySelector(".player1Name");
-        const player2Name = document.querySelector(".player2Name");
-        const btnContainer = document.querySelector(".btnContainer");
-
         players = Players();
-
         player1Name.textContent = players.player1.name;
         player2Name.textContent = players.player2.name;
-
         mainTag.removeChild(btnContainer)
         playerInputs.style = "display:none";
         playerNames.style = "display:flex";
@@ -60,6 +57,7 @@ const gameboard = (() => {
            square.addEventListener("click", (e) => _placeMark(e), {once: true})
            gameboardGrid.removeEventListener("click", _stopProp, true)
            gameboardGrid.appendChild(square);
+           _checkTurn();
         }
     }
 
@@ -82,17 +80,18 @@ const gameboard = (() => {
         targetSquare.appendChild(imgTag);
         count++;
         _checkWin();
+        _checkTurn();
     }
 
-    function _newGame() {
-        while (gameboardGrid.hasChildNodes()){
-            gameboardGrid.removeChild(gameboardGrid.lastChild)
+    function _checkTurn() {
+        if (turn == true){
+            player1Name.classList.add("turnBorder")
+            player2Name.classList.remove("turnBorder")
+           }
+        if (turn == false){
+            player1Name.classList.remove("turnBorder")
+            player2Name.classList.add("turnBorder")
         }
-        boardArr = [1,2,3,4,5,6,7,8,9];
-        turn = true;
-        count = 0;
-        popup.style = "display: none"
-        _makeBoard();
     }
 
     function _checkWin(){
@@ -114,16 +113,28 @@ const gameboard = (() => {
                     players.player1.addWin();
                     popupText.textContent = `${players.player1.name} WINS!`
                     player1score.textContent = players.player1.wins;
+                    turn = false;
                 }
                 else if (combos[i][0] == "o"){
                     players.player2.addWin()
                     popupText.textContent = `${players.player2.name} WINS!`
                     player2score.textContent = players.player2.wins;
+                    turn = true;
                 }
                 popup.style = "display: flex";
                 gameboardGrid.addEventListener("click", _stopProp, true)
             }
         }
+    }
+
+    function _newGame() {
+        while (gameboardGrid.hasChildNodes()){
+            gameboardGrid.removeChild(gameboardGrid.lastChild)
+        }
+        boardArr = [1,2,3,4,5,6,7,8,9];
+        count = 0;
+        popup.style = "display: none"
+        _makeBoard();
     }
 
     function _stopProp(e){
