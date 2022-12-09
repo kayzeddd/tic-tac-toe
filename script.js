@@ -1,17 +1,12 @@
-const Players = () => {
-    const player1 = createPlayer(document.querySelector("#playerOne").value);
-    const player2 = createPlayer(document.querySelector("#playerTwo").value);
-    function createPlayer(name) {
-        let player = {
-            name,
-            wins: 0,
-            addWin(){
-                this.wins += 1
-            }
+const createPlayer = (name) => {
+    let player = {
+        name,
+        wins: 0,
+        addWin(){
+            this.wins += 1
         }
-        return player 
     }
-   return {player1, player2}
+    return player 
 }
 
 const gameboard = (() => {
@@ -29,19 +24,21 @@ const gameboard = (() => {
     const player2score = document.querySelector(".player2Score");
     const popupText = document.querySelector(".popupText");
 
-    newGameBtn.addEventListener("click", _newGame);
-    newGameBtn.addEventListener("click", createPlayers, {once: true})
-    newGameBtn2.addEventListener("click", _newGame)
-
     let boardArr = [1,2,3,4,5,6,7,8,9];
     let turn = true;
     let count = 0;
-    let players;
+    let player1;
+    let player2;
 
+    newGameBtn.addEventListener("click", _newGame);
+    newGameBtn.addEventListener("click", createPlayers, {once: true})
+    newGameBtn2.addEventListener("click", _newGame)
+    
     function createPlayers(){
-        players = Players();
-        player1Name.textContent = players.player1.name;
-        player2Name.textContent = players.player2.name;
+        player1 = createPlayer(document.querySelector("#playerOne").value);
+        player2 = createPlayer(document.querySelector("#playerTwo").value);
+        player1Name.textContent = player1.name;
+        player2Name.textContent = player2.name;
         mainTag.removeChild(btnContainer)
         playerInputs.style = "display:none";
         playerNames.style = "display:flex";
@@ -68,7 +65,7 @@ const gameboard = (() => {
         let targetDataSquare = e.target.getAttribute("data-square");
         let imgTag = document.createElement("img");
         if (turn == true) {
-            imgTag.setAttribute("src",x);
+            imgTag.setAttribute("src", x);
             boardArr[targetDataSquare - 1] = "x";
             turn = false
         }
@@ -110,15 +107,15 @@ const gameboard = (() => {
         for (let i = 0; i < combos.length; i++ ){
             if (combos[i].every(x => x == combos[i][0])){
                 if(combos[i][0] == "x"){
-                    players.player1.addWin();
-                    popupText.textContent = `${players.player1.name} WINS!`
-                    player1score.textContent = players.player1.wins;
+                    player1.addWin();
+                    popupText.textContent = `${player1.name} WINS!`
+                    player1score.textContent = player1.wins;
                     turn = false;
                 }
                 else if (combos[i][0] == "o"){
-                    players.player2.addWin()
-                    popupText.textContent = `${players.player2.name} WINS!`
-                    player2score.textContent = players.player2.wins;
+                    player2.addWin()
+                    popupText.textContent = `${player2.name} WINS!`
+                    player2score.textContent = player2.wins;
                     turn = true;
                 }
                 popup.style = "display: flex";

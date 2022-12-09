@@ -127,6 +127,7 @@ img[src="images/circle.svg"]{
     font-weight: 550;
     padding: 5px 8px;
     border-radius: 10px;
+    border: 6px solid transparent;
 }
 
 .turnBorder {
@@ -172,12 +173,12 @@ img[src="images/circle.svg"]{
     display: flex;
     justify-content: center;
     align-items: center;
-    column-gap: 20px;
+    column-gap: 18px;
 }
 
 .score, .colon {
     font-weight: bold;
-    font-size: 25px;
+    font-size: 28px;
 }
 
 
