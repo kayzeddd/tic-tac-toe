@@ -88,6 +88,9 @@ const gameboard = (() => {
            gameboardGrid.appendChild(square);
            _checkTurn();
         }
+        if (vsAI == true && turn == false){
+            AIplay();
+        }
     }
 
     const _placeMark = (e) => {
@@ -181,9 +184,6 @@ const gameboard = (() => {
         gameOver = false;
         popup.style = "display: none"
         _makeBoard();
-        if (vsAI == true && turn == false){
-            AIplay();
-        }
     }
 
     function _stopProp(e){
@@ -192,3 +192,86 @@ const gameboard = (() => {
 
     return
 })()
+
+let boardArr = [0,1,2,3,4,5,6,7,8];
+let freeSquares = boardArr.filter( x => {if(x !== "x" && x !== "o"){return true}});
+let depth = boardArr.length - freeSquares.length;
+
+function fillArr(index, mark) {
+    boardArr[index] = mark;
+}
+
+function findMove(){
+    let saveBoardArr = boardArr;
+    let winMovesArr = [];
+    let tieMovesArr = [];
+    for (let i = 0; i < freeSquares.length; i++){
+        if (minimax(freeSquares[i], depth, true) > 0){
+            winMovesArr.push(freeSquares[i])
+        }
+        else if (minimax(freeSquares[i], depth, true) == 0){
+            tieMovesArr.push(freeSquares[i])
+        }
+    }
+    if (winMovesArr){
+        console.log(winMovesArr);
+        saveBoardArr[winMovesArr[0]] = "x"
+    }
+    else  {
+        console.log(tieMovesArr);
+        saveBoardArr[tieMovesArr[0]] = "x"
+    }
+    boardArr = saveBoardArr;
+}
+
+function minimax(node, depth, maximizingPlayer){
+    if (depth == 0 || checkWin(arr).over == true){
+        let winner = checkWin(arr).winner;
+        if(winner == "x"){
+            return -1
+        }
+        if(winner == "o"){
+            return 1
+        }
+        if(winner == "tie"){
+            return 0
+        }
+    }
+    if (maximizingPlayer){
+        value = -Infinity;
+        freeSquares.forEach((square) => {
+            fillArr(square, "x");
+            value = Math.max(value, minimax(square, (depth - 1), false));
+        })
+        return value
+    }
+    else {
+        value = +Infinity;
+        freeSquares.forEach((square) => {
+            fillArr(square, "o");
+            value = Math.min(value, minimax(square, (depth - 1), false))
+        })
+        return value
+    }
+}
+
+
+function checkWin(arr){
+    const combos = [arr.slice(0,3),arr.slice(3,6),arr.slice(6,9),
+                    [0,3,6].map(x => arr[x]),[1,4,7].map(x => arr[x]),
+                    [2,5,8].map(x => arr[x]),[0,4,8].map(x => arr[x]),
+                    [2,4,6].map(x => arr[x])];
+    for (let i = 0; i < combos.length; i++ ){
+        if (combos[i].every(x => x == combos[i][0])){
+            if(combos[i][0] == "x"){
+                return {over:true, winner:"x"}
+            }
+            else if (combos[i][0] == "o"){
+                return {over:true, winner:"o"}
+            }
+        }
+    }
+    if(arr.every(x => x !== +x)){
+        return {over:true, winner:"tie"}
+    }
+}
