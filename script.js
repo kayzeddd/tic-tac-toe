@@ -141,17 +141,3 @@ const gameboard = (() => {
     return 
 })()
 
-const createAI = () => {
-    let playerAI = {
-        name: playerAI,
-        wins: 0,
-        addWin(){
-            this.wins += 1
-        }
-    }
-    const playAI = () => {
-        ()
-    }
-
-    return Object.assign({},playerAI)
-}
