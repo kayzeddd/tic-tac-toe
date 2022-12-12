@@ -102,7 +102,7 @@ const gameboard = (() => {
     function AIplay(){
         const playIndex = () => {
             if (turnCount == 0){
-                let moves = [0,2,6,8];
+                let moves = [0,2,4,6,8];
                 return moves[Math.floor(Math.random() * moves.length)]
             }
             else {
@@ -115,6 +115,7 @@ const gameboard = (() => {
         imgTag.setAttribute("src", o);
         boardArr[AIindex] = "o";
         AIsquare.appendChild(imgTag);
+        AIsquare.addEventListener("click", (e) => e.stopImmediatePropagation(), true);
         turn = true;
         turnCount++;
         _checkWin();
