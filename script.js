@@ -102,7 +102,7 @@ const gameboard = (() => {
     function AIplay(){
         const playIndex = () => {
             if (turnCount == 0){
-                let moves = [0,2,6,8];
+                let moves = [0,2,5,6,8];
                 return moves[Math.floor(Math.random() * moves.length)]
             }
             else {
