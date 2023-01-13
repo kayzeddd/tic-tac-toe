@@ -83,15 +83,16 @@ const gameboard = (() => {
         if (turn == true) {
             imgTag.setAttribute("src", x);
             boardArr[+(e.target.getAttribute("data-square"))] = "x";
-            turn = false
+            turn = false;
+            turnCount++;
         }
         else if (turn == false && vsAI == false){
             imgTag.setAttribute("src", o);
             boardArr[+(e.target.getAttribute("data-square"))] = "o";
             turn = true;
+            turnCount++;
         }
         e.target.appendChild(imgTag);
-        turnCount++;
         _checkWin();
         _checkTurn();
         if (turn == false && vsAI == true && gameOver == false){
